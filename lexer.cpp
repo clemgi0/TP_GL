@@ -7,7 +7,6 @@ Symbole * Lexer::Consulter() {
          tampon = new Symbole(FIN);
       else
       {
-
          switch (flux[tete]) {
             case '(':
                tampon = new Symbole(OPENPAR);
