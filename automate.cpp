@@ -90,6 +90,6 @@ void Automate::reduction(int n, Symbole *s)
         }
     }
 
-    statestack.back()->Transition(*this, new expression(val));
+    statestack.back()->Transition(*this, new Expr(val));
     lexer->addSymbol(s);
 }
