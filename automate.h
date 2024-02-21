@@ -14,7 +14,7 @@ class Automate
 {
 public:
     Automate(string chaine);
-    void eval();
+    void analyse();
     void decalage(Symbole *s, Etat *e);
     void reduction(int n, Symbole *s);
     void transitionsimple(Symbole *s, Etat *e);

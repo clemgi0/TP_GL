@@ -7,10 +7,10 @@ int main(void)
 
     string chaine;
 
-    cout << "Indiquez la phrase à analyser :" << endl;
+    cout << "Entrez l'expression à analyser :";
     cin >> chaine;
-    Automate *a = new Automate(chaine);
-    a->eval();
+    Automate *automate = new Automate(chaine);
+    automate->analyse();
 
     return 0;
 }

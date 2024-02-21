@@ -9,23 +9,33 @@ Automate::Automate(string chaine)
     statestack.push_back(etat0);
 }
 
-void Automate::eval()
+void Automate::analyse()
 {
-    bool retourTransition = true;
-    while (retourTransition)
+    bool nouvelEtat = true;
+    while (nouvelEtat)
     {
         Symbole *symbole = lexer->Consulter();
         lexer->Avancer();
-        retourTransition = statestack.back()->Transition(*this, symbole);
+        nouvelEtat = statestack.back()->Transition(*this, symbole);
     }
     cout << "Fin de lecture" << endl;
+    if (*symbolstack.back() != ERREUR)
+    {
+
+        int resultat = symbolstack.back()->getValue();
+        cout << "Expression syntaxiquement correcte" << endl
+             << "Résultat de l'analyse : " << resultat << endl;
+    }
+    else
+    {
+        cout << "Expression non correcte syntaxiquement : caractère invalide" << endl;
+    }
 }
 
 void Automate::decalage(Symbole *s, Etat *e)
 {
     symbolstack.push_back(s);
     statestack.push_back(e);
-    lexer->Avancer();
 }
 
 void Automate::reduction(int n, Symbole *s)
@@ -38,40 +48,48 @@ void Automate::reduction(int n, Symbole *s)
     statestack.back()->Transition(*this, s);
 }
 
-void Automate::transitionsimple(Symbole *s, Etat *e)
+void Automate::reduction(int n, Symbole *s)
 {
-    statestack.push_back(e);
-    symbolstack.push_back(s);
-}
+    vector<Symbole *> aDepiler;
 
-// int Automate::calcul(vector<Symbole *> tab)
-// {
+    for (int i = 0; i < n; i++)
+    {
+        delete (statestack.back());
+        statestack.back();
+        aDepiler.push_back(symbolstack.back());
+        symbolstack.pop_back();
+    }
 
-//     switch (tab.size())
-//     {
-//     case 1:
-//         return tab[0]->eval();
-//         break;
-//     case 3:
-//         if (tab[0]->avoirJeton() == OUVREPAR)
-//         {
-//             return tab[1]->eval();
-//         }
-//         else if (tab[1]->avoirJeton() == PLUS)
-//         {
-//             return tab[0]->eval() + tab[2]->eval();
-//         }
-//         else if (tab[1]->avoirJeton() == MULT)
-//         {
-//             return tab[0]->eval() * tab[2]->eval();
-//         }
-//         break;
-//     }
+    int val;
 
-//     return 0;
-// }
+    if (n == 1)
+    {
+        val = aDepiler.back()->getValue();
+    }
+    else if (n == 3)
+    {
+        if (*aDepiler.back() == OPENPAR)
+        {
+            aDepiler.pop_back();
+            val = aDepiler.back()->getValue();
+        }
+        else
+        {
+            val = aDepiler.back()->getValue();
+            aDepiler.pop_back();
+            if (*aDepiler.back() == MULT)
+            {
+                aDepiler.pop_back();
+                val = val * aDepiler.back()->getValue();
+            }
+            else
+            {
+                aDepiler.pop_back();
+                val = val + aDepiler.back()->getValue();
+            }
+        }
+    }
 
-Automate::~Automate()
-{
-    delete lexer;
+    statestack.back()->Transition(*this, new expression(val));
+    lexer->addSymbol(s);
 }
