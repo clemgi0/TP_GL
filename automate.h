@@ -1,14 +1,15 @@
+using namespace std;
+
 #ifndef GL_TP_H
 #define GL_TP_H
 
 #include <vector>
 #include <string>
+
 #include "symbole.h"
 #include "lexer.h"
 
 class Etat;
-class E0;
-using namespace std;
 
 class Automate
 {
@@ -17,15 +18,16 @@ public:
     void eval();
     void decalage(Symbole *s, Etat *e);
     void reduction(int n, Symbole *s);
+    void transitionsimple(Symbole *s, Etat *e);
     int calcul(vector<Symbole *> v);
     ~Automate();
 
 protected:
-    vector<Symbole *> symbols;
-    vector<Etat *> states;
+    vector<Symbole *> symbolstack;
+    vector<Etat *> statestack;
 
     Lexer *lexer;
     Symbole *reserve;
 };
 
-#endif // GL_TD2_AUTOMATE_H
+#endif
