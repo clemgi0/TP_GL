@@ -1,23 +1,24 @@
-# Variables
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall
-SRC_DIR = .
-OBJ_DIR = bin
-BIN_DIR = .
-SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
-HEADERS = $(wildcard $(SRC_DIR)/*.h)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SOURCES))
-EXECUTABLE = $(BIN_DIR)/my_program
+all: analyse
 
-# Compilation
-all: $(EXECUTABLE)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+analyse: lexer.o symbole.o etats.o automate.o main.o
+	g++ -o analyse lexer.o symbole.o etats.o automate.o main.o
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+lexer.o: lexer.cpp lexer.h
+	g++ -o lexer.o -c lexer.cpp
 
-# Nettoyage
+symbole.o: symbole.cpp symbole.h
+	g++ -o symbole.o -c symbole.cpp
+
+etats.o: Etats.cpp Etats.h
+	g++ -o etats.o -c Etats.cpp
+
+automate.o: Automate.cpp Automate.h
+	g++ -o automate.o -c Automate.cpp
+
+main.o: main.cpp symbole.h lexer.h Etats.h
+	g++ -o main.o -c main.cpp
+
 clean:
-	rm -f $(OBJ_DIR)/*.o $(EXECUTABLE)
+	rm -rf *.o
+

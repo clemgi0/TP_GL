@@ -3,6 +3,13 @@
 #include <iostream>
 #include <stdio.h>
 
+void State::Afficher(Symbole *symbole)
+{
+  cout << name << " | Symbole: ";
+  symbole->Affiche();
+  cout << endl;
+}
+
 State::State() {}
 State::~State() {}
 State::State(string s) { name = s; }
@@ -27,210 +34,285 @@ State8::State8() : State("E8") {}
 
 State9::State9() : State("E9") {}
 
-bool State0::transition(Automate &automate, Symbole *s) {
-  switch (*s) {
+bool State0::transition(Automate &automate, Symbole *s)
+{
+  switch (*s)
+  {
   case INT:
+    Afficher(s);
     automate.decalage(s, new State3);
     break;
   case OPENPAR:
+    Afficher(s);
     automate.decalage(s, new State2);
     break;
   case EXPR:
+    Afficher(s);
     automate.decalage(s, new State1);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
   return true;
 }
 
-bool State1::transition(Automate &automate, Symbole *s) {
+bool State1::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case PLUS:
+    Afficher(s);
     automate.decalage(s, new State4);
     break;
   case MULT:
+    Afficher(s);
     automate.decalage(s, new State5);
     break;
   case FIN:
     return false;
+    Afficher(s);
     break;
   default:
+
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State2::transition(Automate &automate, Symbole *s) {
+bool State2::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case INT:
+    Afficher(s);
     automate.decalage(s, new State3);
     break;
   case OPENPAR:
+    Afficher(s);
     automate.decalage(s, new State2);
     break;
   case EXPR:
+    Afficher(s);
     automate.decalage(s, new State6);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State3::transition(Automate &automate, Symbole *s) {
+bool State3::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case PLUS:
+    Afficher(s);
     automate.reduction(1, new Plus);
     break;
   case MULT:
+    Afficher(s);
     automate.reduction(1, new Mult);
     break;
   case CLOSEPAR:
+    Afficher(s);
     automate.reduction(1, new Closepar);
     break;
   case FIN:
+    Afficher(s);
     automate.reduction(1, new Fin);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State4::transition(Automate &automate, Symbole *s) {
+bool State4::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case INT:
+    Afficher(s);
     automate.decalage(s, new State3);
     break;
   case OPENPAR:
+    Afficher(s);
     automate.decalage(s, new State2);
     break;
   case EXPR:
+    Afficher(s);
     automate.decalage(s, new State7);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State5::transition(Automate &automate, Symbole *s) {
+bool State5::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case INT:
+    Afficher(s);
     automate.decalage(s, new State3);
     break;
   case OPENPAR:
+    Afficher(s);
     automate.decalage(s, new State2);
     break;
   case EXPR:
+    Afficher(s);
     automate.decalage(s, new State8);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State6::transition(Automate &automate, Symbole *s) {
+bool State6::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case PLUS:
+    Afficher(s);
     automate.decalage(s, new State4);
     break;
   case MULT:
+    Afficher(s);
     automate.decalage(s, new State5);
     break;
   case CLOSEPAR:
+    Afficher(s);
     automate.decalage(s, new State9);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State7::transition(Automate &automate, Symbole *s) {
+bool State7::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case PLUS:
+    Afficher(s);
     automate.reduction(3, new Plus);
     break;
   case MULT:
+    Afficher(s);
     automate.decalage(s, new State5);
     break;
   case CLOSEPAR:
+    Afficher(s);
     automate.reduction(3, new Closepar);
     break;
   case FIN:
+    Afficher(s);
     automate.reduction(3, new Fin);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State8::transition(Automate &automate, Symbole *s) {
+bool State8::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case PLUS:
+    Afficher(s);
     automate.reduction(3, new Plus);
     break;
   case MULT:
+    Afficher(s);
     automate.reduction(3, new Mult);
     break;
   case CLOSEPAR:
+    Afficher(s);
     automate.reduction(3, new Closepar);
     break;
   case FIN:
+    Afficher(s);
     automate.reduction(3, new Fin);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 
   return true;
 }
 
-bool State9::transition(Automate &automate, Symbole *s) {
+bool State9::transition(Automate &automate, Symbole *s)
+{
 
-  switch (*s) {
+  switch (*s)
+  {
   case PLUS:
+    Afficher(s);
     automate.reduction(3, new Plus);
     break;
   case MULT:
+    Afficher(s);
     automate.reduction(3, new Mult);
     break;
   case CLOSEPAR:
+    Afficher(s);
     automate.reduction(3, new Closepar);
     break;
   case FIN:
+    Afficher(s);
     automate.reduction(3, new Fin);
     break;
   default:
     automate.decalage(new Symbole(ERREUR), NULL);
+    Afficher(s);
+    AfficherErreur();
     return false;
   }
 

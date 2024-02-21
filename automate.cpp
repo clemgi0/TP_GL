@@ -6,7 +6,7 @@ Automate::Automate(string chaine)
     lexer = new Lexer(chaine);
 
     Etat *etat0 = new Etat_0("etat0");
-    statestack.push_back(etat0);
+    statestack.push(etat0);
 }
 
 void Automate::analyse()
@@ -16,13 +16,13 @@ void Automate::analyse()
     {
         Symbole *symbole = lexer->Consulter();
         lexer->Avancer();
-        nouvelEtat = statestack.back()->Transition(*this, symbole);
+        nouvelEtat = statestack.top()->Transition(*this, symbole);
     }
     cout << "Fin de lecture" << endl;
-    if (*symbolstack.back() != ERREUR)
+    if (*symbolstack.top() != ERREUR)
     {
 
-        int resultat = symbolstack.back()->getValue();
+        int resultat = symbolstack.top()->getValue();
         cout << "Expression syntaxiquement correcte" << endl
              << "Résultat de l'analyse : " << resultat << endl;
     }
@@ -34,62 +34,61 @@ void Automate::analyse()
 
 void Automate::decalage(Symbole *s, Etat *e)
 {
-    symbolstack.push_back(s);
-    statestack.push_back(e);
-}
-
-void Automate::reduction(int n, Symbole *s)
-{
-    for (int i = 0; i < n; i++)
+    symbolstack.push(s);
+    statestack.push(e);
+    // affiche la symbolstack
+    stack<Symbole *> symbolstackCopy = symbolstack;
+    cout << "symbolstack : ";
+    while (!symbolstackCopy.empty())
     {
-        delete (statestack.back());
-        statestack.pop_back();
+        cout << symbolstackCopy.top()->getValue() << " ";
+        symbolstackCopy.pop();
     }
-    statestack.back()->Transition(*this, s);
 }
 
 void Automate::reduction(int n, Symbole *s)
 {
-    vector<Symbole *> aDepiler;
+    stack<Symbole *> aEnlever;
 
     for (int i = 0; i < n; i++)
     {
-        delete (statestack.back());
-        statestack.back();
-        aDepiler.push_back(symbolstack.back());
-        symbolstack.pop_back();
+        delete (statestack.top());
+        statestack.pop();
+        aEnlever.push(symbolstack.top());
+        symbolstack.pop();
     }
 
     int val;
 
     if (n == 1)
     {
-        val = aDepiler.back()->getValue();
+        val = aEnlever.top()->getValue();
     }
     else if (n == 3)
     {
-        if (*aDepiler.back() == OPENPAR)
+        if (*aEnlever.top() == OPENPAR)
         {
-            aDepiler.pop_back();
-            val = aDepiler.back()->getValue();
+            aEnlever.pop();
+            val = aEnlever.top()->getValue();
         }
         else
         {
-            val = aDepiler.back()->getValue();
-            aDepiler.pop_back();
-            if (*aDepiler.back() == MULT)
+            val = aEnlever.top()->getValue();
+            aEnlever.pop();
+            if (*aEnlever.top() == MULT)
             {
-                aDepiler.pop_back();
-                val = val * aDepiler.back()->getValue();
+                aEnlever.pop();
+                val = val * aEnlever.top()->getValue();
             }
             else
             {
-                aDepiler.pop_back();
-                val = val + aDepiler.back()->getValue();
+                aEnlever.pop();
+                val = val + aEnlever.top()->getValue();
             }
         }
     }
+    cout << "val : " << val << endl;
 
-    statestack.back()->Transition(*this, new Expr(val));
+    statestack.top()->Transition(*this, new Expr(val));
     lexer->addSymbol(s);
 }

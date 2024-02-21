@@ -3,7 +3,7 @@ using namespace std;
 #ifndef GL_TP_H
 #define GL_TP_H
 
-#include <vector>
+#include <stack>
 #include <string>
 
 #include "symbole.h"
@@ -18,15 +18,13 @@ public:
     void decalage(Symbole *s, Etat *e);
     void reduction(int n, Symbole *s);
     void transitionsimple(Symbole *s, Etat *e);
-    int calcul(vector<Symbole *> v);
     ~Automate();
 
 protected:
-    vector<Symbole *> symbolstack;
-    vector<Etat *> statestack;
+    stack<Symbole *> symbolstack;
+    stack<Etat *> statestack;
 
     Lexer *lexer;
-    Symbole *reserve;
 };
 
 #endif

@@ -38,7 +38,7 @@ Symbole *Lexer::Consulter()
                   i++;
                }
                tete = tete + i;
-               tampon = new Entier(resultat);
+               tampon = new Int(resultat);
             }
             else
             {
