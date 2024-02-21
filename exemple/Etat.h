@@ -23,7 +23,7 @@ class Etat {
         void printCharInconnu();
 
     protected:
-            string name;
+        string name;
 };
 
 

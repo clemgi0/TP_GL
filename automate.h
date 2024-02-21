@@ -8,8 +8,7 @@ using namespace std;
 
 #include "symbole.h"
 #include "lexer.h"
-
-class Etat;
+#include "etats.h"
 
 class Automate
 {

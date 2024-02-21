@@ -1,12 +1,11 @@
 #include <algorithm>
 #include "automate.h"
-#include "etat.h"
 
 Automate::Automate(string chaine)
 {
     lexer = new Lexer(chaine);
 
-    Etat *etat0 = new E0("etat0");
+    Etat *etat0 = new Etat_0("etat0");
     statestack.push_back(etat0);
 }
 
@@ -17,7 +16,7 @@ void Automate::eval()
     {
         Symbole *symbole = lexer->Consulter();
         lexer->Avancer();
-        retourTransition = statestack.back()->transition(this, symbole);
+        retourTransition = statestack.back()->Transition(*this, symbole);
     }
     cout << "Fin de lecture" << endl;
 }
@@ -36,41 +35,41 @@ void Automate::reduction(int n, Symbole *s)
         delete (statestack.back());
         statestack.pop_back();
     }
-    statestack.back()->transition(this, s);
+    statestack.back()->Transition(*this, s);
 }
 
 void Automate::transitionsimple(Symbole *s, Etat *e)
 {
     statestack.push_back(e);
-    symbolstack.push_back(s)
+    symbolstack.push_back(s);
 }
 
-int Automate::calcul(vector<Symbole *> tab)
-{
+// int Automate::calcul(vector<Symbole *> tab)
+// {
 
-    switch (tab.size())
-    {
-    case 1:
-        return tab[0]->eval();
-        break;
-    case 3:
-        if (tab[0]->avoirJeton() == OUVREPAR)
-        {
-            return tab[1]->eval();
-        }
-        else if (tab[1]->avoirJeton() == PLUS)
-        {
-            return tab[0]->eval() + tab[2]->eval();
-        }
-        else if (tab[1]->avoirJeton() == MULT)
-        {
-            return tab[0]->eval() * tab[2]->eval();
-        }
-        break;
-    }
+//     switch (tab.size())
+//     {
+//     case 1:
+//         return tab[0]->eval();
+//         break;
+//     case 3:
+//         if (tab[0]->avoirJeton() == OUVREPAR)
+//         {
+//             return tab[1]->eval();
+//         }
+//         else if (tab[1]->avoirJeton() == PLUS)
+//         {
+//             return tab[0]->eval() + tab[2]->eval();
+//         }
+//         else if (tab[1]->avoirJeton() == MULT)
+//         {
+//             return tab[0]->eval() * tab[2]->eval();
+//         }
+//         break;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
 Automate::~Automate()
 {
