@@ -5,6 +5,9 @@
     "vector": "cpp",
     "array": "cpp",
     "string_view": "cpp",
-    "ranges": "cpp"
+    "ranges": "cpp",
+    "ostream": "cpp",
+    "iostream": "cpp",
+    "typeinfo": "cpp"
   }
 }

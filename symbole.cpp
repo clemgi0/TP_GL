@@ -3,7 +3,7 @@
 
 void Symbole::Affiche()
 {
-   cout << Etiquettes[ident];
+   cout << Etiquettes[ident] << endl;
 }
 
 void Int::Affiche()

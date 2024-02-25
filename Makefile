@@ -20,5 +20,5 @@ main.o: main.cpp symbole.h lexer.h Etats.h
 	g++ -o main.o -c main.cpp
 
 clean:
-	rm -rf *.o
+	del *.o
 

@@ -15,6 +15,15 @@ void Automate::run()
 
   while (prochainEtat)
   {
+
+    cout << "Contenu de statestack : ";
+    stack<State *> tempStack = statestack;
+    while (!tempStack.empty())
+    {
+      cout << tempStack.top()->name << " ";
+      tempStack.pop();
+    }
+    cout << endl;
     Symbole *s = lexer->Consulter();
     lexer->Avancer();
     prochainEtat = statestack.top()->transition(*this, s);

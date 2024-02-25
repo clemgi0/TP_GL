@@ -9,7 +9,8 @@ class State;
 
 using namespace std;
 
-class Automate {
+class Automate
+{
 
 public:
   Automate(string flux);

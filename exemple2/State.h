@@ -26,9 +26,9 @@ public:
   void AfficherErreur() { cout << "Caractère non reconnu" << endl; }
   virtual bool transition(Automate &automate, Symbole *s) = 0;
   virtual int state();
+  string name;
 
 protected:
-  string name;
 };
 
 class State0 : public State

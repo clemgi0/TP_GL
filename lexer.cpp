@@ -54,25 +54,3 @@ void Lexer::Avancer()
 {
    tampon = nullptr;
 }
-
-void Lexer::addSymbol(Symbole *s)
-{
-
-   switch (*s)
-   {
-   case PLUS:
-      break;
-   case MULT:
-      break;
-   case OPENPAR:
-      break;
-   case CLOSEPAR:
-      tampon = s;
-      break;
-   }
-}
-
-bool Lexer::finDeChaine()
-{
-   return tete == flux.length();
-}

@@ -6,23 +6,24 @@ Automate::Automate(string chaine)
     lexer = new Lexer(chaine);
 
     Etat *etat0 = new Etat_0("etat0");
-    statestack.push(etat0);
+    statestack.push_back(etat0);
 }
 
 void Automate::analyse()
 {
     bool nouvelEtat = true;
-    while (nouvelEtat)
+    while (nouvelEtat && statestack.back() != NULL)
     {
+        // printStateStack();
         Symbole *symbole = lexer->Consulter();
-        lexer->Avancer();
-        nouvelEtat = statestack.top()->Transition(*this, symbole);
+        // symbole->Affiche();
+        nouvelEtat = statestack.back()->Transition(*this, symbole);
     }
     cout << "Fin de lecture" << endl;
-    if (*symbolstack.top() != ERREUR)
+    if (*symbolstack.back() != ERREUR)
     {
-
-        int resultat = symbolstack.top()->getValue();
+        int resultat = symbolstack.back()->getValue();
+        symbolstack.pop_back();
         cout << "Expression syntaxiquement correcte" << endl
              << "Résultat de l'analyse : " << resultat << endl;
     }
@@ -34,61 +35,46 @@ void Automate::analyse()
 
 void Automate::decalage(Symbole *s, Etat *e)
 {
-    symbolstack.push(s);
-    statestack.push(e);
-    // affiche la symbolstack
-    stack<Symbole *> symbolstackCopy = symbolstack;
-    cout << "symbolstack : ";
-    while (!symbolstackCopy.empty())
-    {
-        cout << symbolstackCopy.top()->getValue() << " ";
-        symbolstackCopy.pop();
-    }
+    symbolstack.push_back(s);
+    statestack.push_back(e);
+    lexer->Avancer();
+}
+
+void Automate::transitionSimple(Symbole *s, Etat *e)
+{
+    symbolstack.push_back(s);
+    statestack.push_back(e);
 }
 
 void Automate::reduction(int n, Symbole *s)
 {
-    stack<Symbole *> aEnlever;
-
     for (int i = 0; i < n; i++)
     {
-        delete (statestack.top());
-        statestack.pop();
-        aEnlever.push(symbolstack.top());
-        symbolstack.pop();
+        delete (statestack.back());
+        statestack.pop_back();
     }
+    statestack.back()->Transition(*this, s);
+}
 
-    int val;
+Expr *Automate::popSymbole()
+{
+    Expr *e = (Expr *)symbolstack.back();
+    symbolstack.pop_back();
+    return e;
+}
 
-    if (n == 1)
+void Automate::popAndDestroySymbole()
+{
+    delete symbolstack.back();
+    symbolstack.pop_back();
+}
+
+void Automate::printStateStack()
+{
+    cout << "Contenu de statestack : ";
+    for (auto it = statestack.rbegin(); it != statestack.rend(); ++it)
     {
-        val = aEnlever.top()->getValue();
+        cout << (*it)->name << " ";
     }
-    else if (n == 3)
-    {
-        if (*aEnlever.top() == OPENPAR)
-        {
-            aEnlever.pop();
-            val = aEnlever.top()->getValue();
-        }
-        else
-        {
-            val = aEnlever.top()->getValue();
-            aEnlever.pop();
-            if (*aEnlever.top() == MULT)
-            {
-                aEnlever.pop();
-                val = val * aEnlever.top()->getValue();
-            }
-            else
-            {
-                aEnlever.pop();
-                val = val + aEnlever.top()->getValue();
-            }
-        }
-    }
-    cout << "val : " << val << endl;
-
-    statestack.top()->Transition(*this, new Expr(val));
-    lexer->addSymbol(s);
+    cout << endl;
 }
