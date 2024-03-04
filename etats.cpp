@@ -14,7 +14,7 @@ bool Etat_0::Transition(Automate &automate, Symbole *symbole)
     case EXPR:
     {
         // automate.printStateStack();
-        automate.transitionSimple(symbole, new Etat_1("etat_1")); // si automate. marche pas mettre automate. partout dans ce file et dans le .h aussi ptetre
+        automate.transitionSimple(symbole, new Etat_1("etat_1"));
         // automate.printStateStack();
         break;
     }
