@@ -1,5 +1,12 @@
 #include "lexer.h"
 
+Lexer::Lexer(string chaine)
+{
+   flux = parseEntry(chaine);
+   tete = 0;
+   tampon = nullptr;
+}
+
 Symbole *Lexer::Consulter()
 {
    if (!tampon)
@@ -53,4 +60,19 @@ Symbole *Lexer::Consulter()
 void Lexer::Avancer()
 {
    tampon = nullptr;
+}
+
+string Lexer::parseEntry(string chaineInit)
+{
+   string temp;
+
+   for (char c : chaineInit)
+   {
+      if (c != ' ')
+      {
+         temp += c;
+      }
+   }
+
+   return temp;
 }

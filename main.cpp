@@ -8,7 +8,7 @@ int main(void)
     string chaine;
 
     cout << "Entrez l'expression à analyser :";
-    cin >> chaine;
+    getline(cin, chaine);
     Automate *automate = new Automate(chaine);
     automate->analyse();
 
